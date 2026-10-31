@@ -2,57 +2,120 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartAI Helper</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #101827;
-      color: white;
-      text-align: center;
-    }
-    header {
-      padding: 35px 15px;
-      background: #172554;
-    }
-    h1 { color: #60a5fa; }
-    .container { padding: 20px; }
-    .tool {
-      background: #1e293b;
-      padding: 20px;
-      margin: 14px auto;
-      border-radius: 12px;
-      max-width: 400px;
-    }
-    p { color: #cbd5e1; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartAI Helper</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0f172a;color:white;font-family:Arial,sans-serif}
+header{text-align:center;padding:25px 12px;background:#1e293b}
+header h1{color:#38bdf8}
+.container{max-width:700px;margin:auto;padding:18px}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tool{background:#1e293b;padding:18px;border-radius:12px;cursor:pointer;border:1px solid #334155}
+.tool h3{margin:0 0 8px;font-size:17px}
+.tool p{color:#cbd5e1;margin:0;font-size:13px}
+.panel{display:none;background:#1e293b;padding:18px;margin-top:20px;border-radius:12px}
+.panel.active{display:block}
+textarea{width:100%;min-height:100px;padding:12px;border-radius:8px;margin:10px 0;background:#0f172a;color:white;border:1px solid #475569}
+button{background:#0284c7;color:white;border:0;padding:12px 18px;border-radius:8px;cursor:pointer;margin:5px 0}
+.output{white-space:pre-wrap;background:#0f172a;padding:12px;border-radius:8px;margin-top:12px;overflow-wrap:anywhere}
+@media(max-width:420px){.tools{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <header>
-    <h1>SmartAI Helper</h1>
-    <p>आपका अपना AI Assistant</p>
-  </header>
+<header>
+<h1>🤖 SmartAI Helper</h1>
+<p>आपका अपना AI Assistant</p>
+</header>
+<div class="container">
+<h2>हमारे AI Tools</h2>
+<div class="tools">
+<div class="tool" onclick="openTool('chat')">
+<h3>🤖 AI Chat</h3><p>अपने सवालों के जवाब पाएँ।</p>
+</div>
+<div class="tool" onclick="openTool('youtube')">
+<h3>▶️ YouTube Helper</h3><p>टाइटल और हैशटैग बनाएँ।</p>
+</div>
+<div class="tool" onclick="openTool('prompt')">
+<h3>🎬 AI Prompt Maker</h3><p>फोटो और वीडियो प्रॉम्प्ट बनाएँ।</p>
+</div>
+<div class="tool" onclick="openTool('news')">
+<h3>📰 AI News</h3><p>नई AI खबरें देखें।</p>
+</div>
+</div>
 
-  <div class="container">
-    <h2>हमारे AI Tools</h2>
-    <div class="tool">
-      <h3>🤖 AI Chat</h3>
-      <p>अपने सवालों के जवाब पाएँ।</p>
-    </div>
-    <div class="tool">
-      <h3>▶️ YouTube Helper</h3>
-      <p>वीडियो के टाइटल और हैशटैग बनाएँ।</p>
-    </div>
-    <div class="tool">
-      <h3>🎬 AI Prompt Maker</h3>
-      <p>फोटो और वीडियो के प्रॉम्प्ट बनाएँ।</p>
-    </div>
-    <div class="tool">
-      <h3>📰 AI News</h3>
-      <p>नई AI खबरें और ट्रेंड देखें।</p>
-    </div>
-  </div>
+<section id="chat" class="panel">
+<h2>🤖 AI Chat</h2>
+<textarea id="chatInput" placeholder="अपना सवाल लिखें..."></textarea>
+<button onclick="askAI('chatInput','chatOutput')">Send</button>
+<div id="chatOutput" class="output">यहाँ जवाब दिखाई देगा।</div>
+</section>
+
+<section id="youtube" class="panel">
+<h2>▶️ YouTube Helper</h2>
+<textarea id="youtubeInput" placeholder="वीडियो किस विषय पर है?"></textarea>
+<button onclick="askAI('youtubeInput','youtubeOutput','इस विषय पर YouTube वीडियो के लिए आकर्षक टाइटल, डिस्क्रिप्शन और हैशटैग हिंदी में बनाओ: ')">बनाएँ</button>
+<div id="youtubeOutput" class="output">यहाँ परिणाम आएगा।</div>
+</section>
+
+<section id="prompt" class="panel">
+<h2>🎬 AI Prompt Maker</h2>
+<textarea id="promptInput" placeholder="कैसी फोटो या वीडियो बनानी है?"></textarea>
+<button onclick="askAI('promptInput','promptOutput','इस विचार के लिए एक विस्तृत AI फोटो और वीडियो जनरेशन प्रॉम्प्ट बनाओ: ')">Prompt बनाएँ</button>
+<div id="promptOutput" class="output">यहाँ Prompt आएगा।</div>
+</section>
+
+<section id="news" class="panel">
+<h2>📰 AI News</h2>
+<button onclick="loadNews()">खबरें देखें</button>
+<div id="newsOutput" class="output">खबरें यहाँ दिखाई देंगी।</div>
+</section>
+</div>
+
+<script>
+const API_BASE="https://smartaihelper.trademalikk.workers.dev";
+
+function openTool(id){
+document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+
+async function askAI(inputId,outputId,prefix=""){
+const input=document.getElementById(inputId).value.trim();
+const output=document.getElementById(outputId);
+if(!input){output.textContent="पहले कुछ लिखें।";return;}
+output.textContent="AI जवाब तैयार कर रहा है...";
+try{
+const response=await fetch(API_BASE+"/api/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:prefix+input})
+});
+const data=await response.json();
+if(!response.ok)throw new Error(data.error||"Request failed");
+output.textContent=data.reply||data.response||data.text||JSON.stringify(data);
+}catch(error){
+output.textContent="Error: "+error.message;
+}
+}
+
+async function loadNews(){
+const output=document.getElementById("newsOutput");
+output.textContent="खबरें लोड हो रही हैं...";
+try{
+const response=await fetch(API_BASE+"/api/news");
+const data=await response.json();
+if(!response.ok)throw new Error(data.error||"News load नहीं हुई");
+const articles=data.results||[];
+output.textContent=articles.length
+?articles.map((a,i)=>(i+1)+". "+(a.title||"बिना शीर्षक")+"\n"+(a.description||"")+"\n"+(a.link||"")).join("\n\n")
+:"अभी कोई खबर उपलब्ध नहीं है।";
+}catch(error){
+output.textContent="News Error: "+error.message;
+}
+}
+</script>
 </body>
 </html>
