@@ -91,7 +91,7 @@ try{
 const response=await fetch(API_BASE+"/api/chat",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({message:prefix+input})
+body:JSON.stringify({question:prefix+input})
 });
 const data=await response.json();
 if(!response.ok)throw new Error(data.error||"Request failed");
